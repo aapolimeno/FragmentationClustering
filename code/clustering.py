@@ -66,15 +66,8 @@ def get_clusters(embeddings, method, alg):
     
     
     if alg == "AC":
-
-        if method == "BoW" :
-            distance_threshold = 124
-        if method == "word": 
-            distance_threshold = 4
-        if method == "SBERT": 
-            distance_threshold = 5 
             
-        clustering_model = AgglomerativeClustering(n_clusters = None, linkage = 'ward', distance_threshold = distance_threshold) #, affinity='cosine', linkage='average', distance_threshold=0.4)
+        clustering_model = AgglomerativeClustering(n_clusters = None, linkage = 'ward', distance_threshold = 0) #, affinity='cosine', linkage='average', distance_threshold=0.4)
     
         clustering_model.fit(embeddings)
         cluster_assignment = clustering_model.labels_
@@ -183,5 +176,20 @@ print("===================================================================")
 
 pred_clusters["gold"] = true
     
+# Obtain the predictions and compare them to gold 
+best_sbert = pred_clusters["SBERT_AC_(0, 'ward')"].tolist()
+best_word = pred_clusters["word_AC_(0, 'ward')"].tolist()
+best_bow = pred_clusters["BoW_AC_(0, 'ward')"].tolist()
+best_preds = pd.DataFrame()
+best_preds["SBERT_DB"] = best_sbert
+best_preds["word_DB"] = best_word
+best_preds["BoW_DB"] = best_bow
+best_preds["gold"] = true 
+
+best_preds.to_csv("predictions/predictions_AC.csv")
+
+
 pred_clusters.to_csv('predictions/predicted_chains.csv', index = True)
 eval_scores.to_csv("predictions/evaluation_scores.csv", index = True)
+
+
