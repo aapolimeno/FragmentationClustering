@@ -4,14 +4,6 @@ Created on Wed Nov  2 10:11:31 2022
 
 @author: Alessandra
 """
-
-
-
-
-
-
-
-
 import pandas as pd 
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import AgglomerativeClustering, DBSCAN
@@ -191,5 +183,15 @@ best_preds.to_csv("predictions/predictions_AC.csv")
 
 pred_clusters.to_csv('predictions/predicted_chains.csv', index = True)
 eval_scores.to_csv("predictions/evaluation_scores.csv", index = True)
+
+
+
+
+# 
+pred_clusters = pd.read_csv("predictions/clusters_AC_1.csv", index_col = 0)
+
+
+
+
 
 
