@@ -157,5 +157,78 @@ for link in links:
     
 chain_df['text'] = texts
 chain_df['timeline_ids'] = timeline_ids
+
+
+
+# Remove stuff 
+chain_df = pd.read_csv("data/hlgd_chains.csv", index_col = 0)
+
+
+### Remove slashes and newlines 
+texts = chain_df['text'].tolist()
+clean_texts = []
+
+for text in texts: 
+    text = text.replace("\\n", "")
+    text = text.replace('\\', " ")
+    text = text.replace('   ', ' ')
+    clean_texts.append(text)
+    
+chain_df['text'] = clean_texts
+
+
+
+### Drop rows with None and CAPTCHA messages 
+chain_df = chain_df[chain_df["text"].str.contains("None") == False]
+chain_df = chain_df[chain_df["text"].str.contains("To continue, please click the box below") == False]
+chain_df = chain_df[chain_df["text"].str.contains("Deze website is geblokkeerd Europese sancties") == False]
+
+
+
+#### Remove text after certain keywords 
+"""
+def remove_after_keyword(df, keyword):
+
+    # identify the to-be-cleaned text
+    texts = df["text"].tolist()
+    
+
+    
+    new_texts = []
+    
+    for text in texts: 
+       # print("old text: ", text)
+        old_len = len(text)
+        
+        #print()
+        if keyword in text: 
+            index = text.find(keyword)
+            text = text[:index]
+        #print("new text: ", text)   
+        #print(len(text))
+        #print()
+        new_len = len(text)
+        
+        if old_len != new_len: 
+            print(old_len)
+            print(new_len)
+            print(keyword)
+            print(text)
+            print()
+        
+        new_texts.append(text)
+
+    df['text'] = new_texts
+            
+
+
+keywords = ["VC fund", "Allana"]
+
+for keyword in keywords: 
+    remove_after_keyword(chain_df, keyword)
+
+"""
+
+
     
 chain_df.to_csv("data/hlgd_chains.csv")
